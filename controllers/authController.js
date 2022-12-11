@@ -26,6 +26,7 @@ authController.post("/login", async (req, res) => {
 
   try {
     const user = await login(email, password)
+    res.cookie("token", user.accessToken)
     res.status(201).json(user)
   } catch (err) {
 

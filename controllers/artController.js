@@ -1,29 +1,40 @@
-const { createArt } = require("../services/artService");
+const { createArt, getOwnerArt, getByDateAll } = require("../services/artService");
+const User = require("../models/User");
 
 const artController = require("express").Router();
 
-artController.get("/getAll", (req, res) => {
-res.json({title:'TestCard', imgUrl:'Url', description:"BLABLA"})
+artController.post('/art', async (req, res) => {
+    const user = await User.findOne({ username: req.user.username })
+
+
+    try {
+        req.body.owner = user._id
+        req.body.ownerUsername = user.username
+        const art = await createArt(req.body)
+        res.status(201).json(art)
+    } catch (err) {
+
+        res.status(400).json({ error: err.message })
+
+    }
+    res.end()
 });
 
 
-artController.post('/', async (req,res) => {
-const art = {
-    title: req.body.title,
-    imageUrl: req.body.imageUrl,
-    category:req.body.category,
-    description:req.body.description,
-    owner:req.user._id
-}
+artController.get('/myArt', async (req, res) => {
+    const art = await getOwnerArt(req.user._id)
+    return res.status(200).json(art)
+})
 
-try {
-    await createArt()
-    res.status(200).json()
-} catch (error) {
-     res.status(400).json({error:error.message})
-}
+artController.get('/browse', async (req, res) => {
+    try {
+        const art = await getByDateAll()
+        return res.status(200).json(art)
 
+    } catch (error) {
+        res.status(400).json({ error: err.message })
+    }
 
-});
+})
 
 module.exports = artController;

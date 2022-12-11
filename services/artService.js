@@ -1,11 +1,12 @@
 const art = require('../models/art')
 
-async function getAll() {
-    return await art.find({})
+async function getByDateAll() {
+    return await art.find({}).sort({ "created_at": -1})
   }
   
-  async function createArt(art) {
-    return await art.create(art);
+  async function createArt(data) {
+    return art.create(data);
+    
   }
   
   async function getById(id) {
@@ -26,10 +27,15 @@ async function getAll() {
     return existing.save();
   }
 
+  async function getOwnerArt(id){
+    return art.find({owner: id})
+  }
+
   module.exports ={
-    getAll,
+    getByDateAll,
     createArt,
     getById,
     deleteById,
-    updateById
+    updateById,
+    getOwnerArt
   }

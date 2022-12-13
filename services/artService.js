@@ -22,7 +22,7 @@ async function getByDateAll() {
   
     existing.title = data.title;
     existing.description = data.description;
-    existing.category = data.category;
+    existing.artCategory = data.artCategory;
   
     return existing.save();
   }

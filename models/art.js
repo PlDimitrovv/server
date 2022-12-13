@@ -19,7 +19,6 @@ const artSchema = new Schema({
 },
   { timestamps: { createdAt: 'created_at' } });
 
-
 artSchema.index({ title: 1 }, {
   collation: {
     locale: 'en',

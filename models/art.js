@@ -13,7 +13,7 @@ const artSchema = new Schema({
   },
   artCategory: { type: String, required: true, enum: ["Photography", "Painting", "Sculpture", "Architecture", "Music Cover"] },
   description: { type: String, minlength: [10, `Description must be at least 10 characters long`] },
-  rating: { type: [Types.ObjectId], default: [] },
+  likes: [{userId:{type:String},isLiked:{type:Boolean}}],
   owner: { type: Types.ObjectId, ref: "User" },
   ownerUsername: { type: String }
 },

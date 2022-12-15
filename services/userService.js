@@ -18,14 +18,15 @@ function createSession({ _id, username, email }) {
   const token = jwt.sign(payload, JST_SECRET);
   return {
     email: email,
+    _id: _id,
     username: username,
     accessToken: token,
   }
-  
+
 }
 
 async function register(email, username, password) {
-  
+
   const existingUser = await User.findOne({ username }).collation({ locale: "en", strength: 2 });
   const existingEmail = await User.findOne({ email }).collation({ locale: "en", strength: 2 });
   if (existingUser) {
@@ -35,7 +36,7 @@ async function register(email, username, password) {
   if (existingEmail) {
     throw new Error("Email is taken");
   }
- 
+
   const hashedPassword = await bcrypt.hash(password, 10);
   const user = await User.create({
     email,

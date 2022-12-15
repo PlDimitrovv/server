@@ -1,11 +1,10 @@
-const { createArt, getOwnerArt, getByDateAll, getById, updateById, deleteById } = require("../services/artService");
+const { createArt, getOwnerArt, getByDateAll, getById, updateById, deleteById, likes } = require("../services/artService");
 const User = require("../models/User");
 
 const artController = require("express").Router();
 
 artController.post('/art', async (req, res) => {
     const user = await User.findOne({ username: req.user.username })
-
 
     try {
         req.body.owner = user._id
@@ -36,8 +35,6 @@ artController.get('/browse', async (req, res) => {
     }
 
 })
-
-
 
 artController.get('/:id', async (req, res) => {
     try {
@@ -82,6 +79,20 @@ artController.delete('/:id', async (req, res) => {
     }
 
     await deleteById(req.params.id);
+})
+
+//likes
+
+artController.post('/like/:id', async (req, res) => {
+    try {
+        const artId = req.params.id;
+        const userId = req.user._id
+        const updatedArt = await likes(artId, userId)
+        res.status(200).json(updatedArt)
+        
+    } catch (error) {
+        res.status(400).json({ error: error.message })
+    }
 })
 
 module.exports = artController;

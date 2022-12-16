@@ -1,4 +1,4 @@
-const { createArt, getOwnerArt, getByDateAll, getById, updateById, deleteById, likes } = require("../services/artService");
+const { createArt, getOwnerArt, getByDateAll, getById, updateById, deleteById, likes, getByLikes } = require("../services/artService");
 const User = require("../models/User");
 
 const artController = require("express").Router();
@@ -79,6 +79,13 @@ artController.delete('/:id', async (req, res) => {
     }
 
     await deleteById(req.params.id);
+})
+
+//get top 3
+
+artController.get('/', async(req,res) =>{
+    const art = await getByLikes()
+    res.status(200).json(art)
 })
 
 //likes

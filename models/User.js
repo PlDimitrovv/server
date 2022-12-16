@@ -2,7 +2,7 @@ const { Schema, model } = require("mongoose");
 
 //User schema username/email/pass
 const userSchema = new Schema({
-  username: { type: String, required: true, unique: true, minlength: [3, 'Username must me at least 5 characters long!'] },
+  username: { type: String, required: true, unique: true, minlength: [5, 'Username must me at least 5 characters long!'] },
   email: {type: String,required: true,unique: true},
   hashedPassword: { type: String, required: true },
 });

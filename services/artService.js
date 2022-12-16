@@ -4,6 +4,8 @@ async function getByDateAll() {
   return await art.find({}).sort({ "created_at": -1 })
 }
 
+
+
 async function createArt(data) {
   return art.create(data);
 
@@ -33,13 +35,19 @@ async function getOwnerArt(id) {
 
 async function likes(id, userId) {
   const existingArt = await art.findById(id)
-
+  
   if (existingArt.likes.some(u => (u.userId == userId))) {
 
   } else {
     existingArt.likes.push({ userId: userId, isLiked: true })
   }
+  existingArt.likesCount = existingArt.likes.length
   existingArt.save()
+  return existingArt
+}
+
+async function getByLikes(id) {
+  const existingArt = await art.find().sort({likesCount:-1}).limit(3)
   return existingArt
 }
 
@@ -50,5 +58,6 @@ module.exports = {
   deleteById,
   updateById,
   getOwnerArt,
-  likes
+  likes,
+  getByLikes
 }
